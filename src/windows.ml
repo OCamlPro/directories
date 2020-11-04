@@ -145,6 +145,7 @@ module GUID = struct
     | Templates
     | Videos
 
+  (*
   let to_guid = function
     | UserProfile          -> 0x5E6C858F, 0x0E22, 0x4760, 0x9A, 0xFE, 0xEA, 0x33, 0x17, 0xB6, 0x71, 0x73
     | LocalApplicationData -> 0xF1B32785, 0x6FBA, 0x4FCF, 0x9D, 0x55, 0x7B, 0x8E, 0x7F, 0x15, 0x70, 0x91
@@ -157,22 +158,39 @@ module GUID = struct
     | Public               -> 0xDFDF76A2, 0xC82A, 0x4D63, 0x90, 0x6A, 0x56, 0x44, 0xAC, 0x45, 0x73, 0x85
     | Templates            -> 0xA63293E8, 0x664E, 0x48DB, 0xA0, 0x79, 0xDF, 0x75, 0x9E, 0x05, 0x09, 0xF7
     | Videos               -> 0x18989B1D, 0x99B5, 0x455B, 0x84, 0x1C, 0xAB, 0x7C, 0x74, 0xE4, 0xDD, 0xFC
+  *)
+
+  let to_guid = function
+    | UserProfile          -> 0x5E6C858F, 0x0E22, 0x4760, Int64.of_string "0x9AFEEA3317B67173"
+    | LocalApplicationData -> 0xF1B32785, 0x6FBA, 0x4FCF, Int64.of_string "0x9D557B8E7F157091"
+    | ApplicationData      -> 0x3EB685DB, 0x65F9, 0x4CF6, Int64.of_string "0xA03AE3EF65729F3D"
+    | Music                -> 0x4BD8D571, 0x6D19, 0x48D3, Int64.of_string "0xBE97422220080E43"
+    | Desktop              -> 0xB4BFCC3A, 0xDB2C, 0x424C, Int64.of_string "0xB0297FE99A87C641"
+    | Documents            -> 0xFDD39AD0, 0x238F, 0x46AF, Int64.of_string "0xADB46C85480369C7"
+    | Downloads            -> 0x374DE290, 0x123F, 0x4565, Int64.of_string "0x916439C4925E467B"
+    | Pictures             -> 0x33E28130, 0x4E1E, 0x4676, Int64.of_string "0x835A98395C3BC3BB"
+    | Public               -> 0xDFDF76A2, 0xC82A, 0x4D63, Int64.of_string "0x906A5644AC457385"
+    | Templates            -> 0xA63293E8, 0x664E, 0x48DB, Int64.of_string "0xA079DF759E0509F7"
+    | Videos               -> 0x18989B1D, 0x99B5, 0x455B, Int64.of_string "0x841CAB7C74E4DDFC"
 
   let t : t structure typ = structure "_GUID"
   let data1 = field t "Data1" ulong
   let data2 = field t "Data2" ushort
   let data3 = field t "Data3" ushort
-  let data4 = field t "Data4" (array 8 uchar)
+  (* let data4 = field t "Data4 (array 8 uchar)"*)
+  let data4 = field t "Data4" int64_t
   let () = seal t
 
   let to_guid guid =
-    let d1, d2, d3, d4_0, d4_1, d4_2, d4_3, d4_4, d4_5, d4_6, d4_7 = to_guid guid in
+    (* let d1, d2, d3, d4_0, d4_1, d4_2, d4_3, d4_4, d4_5, d4_6, d4_7 = to_guid guid in *)
+    let d1, d2, d3, d4 = to_guid guid in
     let guid = make t in
     setf guid data1 (Unsigned.ULong.of_int d1);
     setf guid data2 (Unsigned.UShort.of_int d2);
     setf guid data3 (Unsigned.UShort.of_int d3);
-    let l = [d4_0; d4_1; d4_2; d4_3; d4_4; d4_5; d4_6; d4_7] in
-    setf guid data4 (CArray.map uchar Unsigned.UChar.of_int (CArray.of_list int l));
+    setf guid data4 d4;
+    (* let l = [d4_0; d4_1; d4_2; d4_3; d4_4; d4_5; d4_6; d4_7] in
+    setf guid data4 (CArray.map uchar Unsigned.UChar.of_int (CArray.of_list int l)); *)
     guid
 end
 
