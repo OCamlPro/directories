@@ -1,4 +1,5 @@
 (library
  (public_name directories)
  (libraries ctypes ctypes.foreign)
+ (c_library_flags -lshell32)
  (modules Common Linux Windows Macos))
