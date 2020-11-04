@@ -125,7 +125,7 @@ module Hresult = struct
     | 0x8007000El -> E_outofmemory
     | 0x80004003l -> E_pointer
     | 0x8000FFFFl -> E_unexpected
-    | n -> raise @@ Invalid_argument (Format.sprintf "Hresult.of_int: %s" (Int32.to_string n))
+    | n -> raise @@ Invalid_argument (Format.sprintf "Hresult.of_int: %x" (Int32.to_int n))
 
   let t = Ctypes.view ~read:of_int32 ~write:to_int32 Ctypes.int32_t
 end
@@ -161,17 +161,17 @@ module GUID = struct
   *)
 
   let to_guid = function
-    | UserProfile          -> 0x5E6C858F, 0x0E22, 0x4760, Int64.of_string "0x9AFEEA3317B67173"
-    | LocalApplicationData -> 0xF1B32785, 0x6FBA, 0x4FCF, Int64.of_string "0x9D557B8E7F157091"
-    | ApplicationData      -> 0x3EB685DB, 0x65F9, 0x4CF6, Int64.of_string "0xA03AE3EF65729F3D"
-    | Music                -> 0x4BD8D571, 0x6D19, 0x48D3, Int64.of_string "0xBE97422220080E43"
-    | Desktop              -> 0xB4BFCC3A, 0xDB2C, 0x424C, Int64.of_string "0xB0297FE99A87C641"
-    | Documents            -> 0xFDD39AD0, 0x238F, 0x46AF, Int64.of_string "0xADB46C85480369C7"
-    | Downloads            -> 0x374DE290, 0x123F, 0x4565, Int64.of_string "0x916439C4925E467B"
-    | Pictures             -> 0x33E28130, 0x4E1E, 0x4676, Int64.of_string "0x835A98395C3BC3BB"
-    | Public               -> 0xDFDF76A2, 0xC82A, 0x4D63, Int64.of_string "0x906A5644AC457385"
-    | Templates            -> 0xA63293E8, 0x664E, 0x48DB, Int64.of_string "0xA079DF759E0509F7"
-    | Videos               -> 0x18989B1D, 0x99B5, 0x455B, Int64.of_string "0x841CAB7C74E4DDFC"
+    | UserProfile          -> 0x5E6C858F, 0x0E22, 0x4760, Int64.of_string "0x7371B61733EAFE9A"
+    | LocalApplicationData -> 0xF1B32785, 0x6FBA, 0x4FCF, Int64.of_string "0x9170157F8E7B559D"
+    | ApplicationData      -> 0x3EB685DB, 0x65F9, 0x4CF6, Int64.of_string "0x3D9F7265EFE33AA0"
+    | Music                -> 0x4BD8D571, 0x6D19, 0x48D3, Int64.of_string "0x430E0820224297BE"
+    | Desktop              -> 0xB4BFCC3A, 0xDB2C, 0x424C, Int64.of_string "0x41C6879AE97F29B0"
+    | Documents            -> 0xFDD39AD0, 0x238F, 0x46AF, Int64.of_string "0xC7690348856CB4AD"
+    | Downloads            -> 0x374DE290, 0x123F, 0x4565, Int64.of_string "0x7B465E92C4396491"
+    | Pictures             -> 0x33E28130, 0x4E1E, 0x4676, Int64.of_string "0xBBC33B5C39985A83"
+    | Public               -> 0xDFDF76A2, 0xC82A, 0x4D63, Int64.of_string "0x857345AC44566A90"
+    | Templates            -> 0xA63293E8, 0x664E, 0x48DB, Int64.of_string "0xF709059E75DF79A0"
+    | Videos               -> 0x18989B1D, 0x99B5, 0x455B, Int64.of_string "0xFCDDE4747CAB1C84"
 
   let t : t structure typ = structure "_GUID"
   let data1 = field t "Data1" ulong
@@ -195,7 +195,8 @@ module GUID = struct
 end
 
 (** see https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath *)
-let sh_get_known_folder_path = foreign "SHGetKnownFolderPath" (GUID.t @-> Known_folder_flag.t @-> Token.t @-> ptr string @-> returning Hresult.t)
+let shell32 = Dl.dlopen ~flags:[Dl.RTLD_LAZY] ~filename:"SHELL32";;
+let sh_get_known_folder_path = foreign ~from:shell32 "SHGetKnownFolderPath" (GUID.t @-> Known_folder_flag.t @-> Token.t @-> ptr string @-> returning Hresult.t)
 
 let get_folderid id =
   let path = allocate string "" in
