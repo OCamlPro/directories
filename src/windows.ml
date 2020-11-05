@@ -196,13 +196,14 @@ end
 
 (** see https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath *)
 let shell32 = Dl.dlopen ~flags:[Dl.RTLD_LAZY] ~filename:"SHELL32";;
-let sh_get_known_folder_path = foreign ~from:shell32 "SHGetKnownFolderPath" (GUID.t @-> Known_folder_flag.t @-> Token.t @-> ptr string @-> returning Hresult.t)
+let sh_get_known_folder_path = foreign ~from:shell32 "SHGetKnownFolderPath" (GUID.t @-> Known_folder_flag.t @-> Token.t @-> ptr (ptr string) @-> returning Hresult.t)
 
 let get_folderid id =
   let path = allocate string "" in
+  let path = allocate (ptr string) path in
   let result = sh_get_known_folder_path (GUID.to_guid id) Known_folder_flag.Default Token.Current_user path in
   match result with
-  | S_ok -> Some (!@ path)
+  | S_ok -> Some (!@(!@path))
   | _err -> None
 
 
