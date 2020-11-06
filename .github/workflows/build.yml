@@ -1,0 +1,42 @@
+name: Main Workflow
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        ocaml-version:
+          - 4.10.0
+        include:
+          - os: ubuntu-latest
+            ocaml-version: 4.07.0
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: avsm/setup-ocaml@v1
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+      - run: opam pin add . -y --no-action
+      - run: opam depext -y directories
+      - run: opam install -y ./*.opam --deps-only --with-test
+      - run: opam upgrade --fixup
+      - run: opam exec -- dune build @install
+      - name: run test suite
+        run: opam exec -- dune build @runtest
+      - name: test source is well formatted
+        run: opam exec -- dune build @fmt
+        continue-on-error: true
+        if: matrix.ocaml-version == '4.10.0' && matrix.os == 'ubuntu-latest'
+
