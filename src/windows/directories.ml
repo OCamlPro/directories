@@ -1,11 +1,11 @@
 open Ctypes
 open Foreign
 
-let (/) = Filename.concat
+let ( / ) = Filename.concat
 
 module Known_folder_flag = struct
-
-  (** see https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/ne-shlobj_core-known_folder_flag *)
+  (** see
+      https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/ne-shlobj_core-known_folder_flag *)
   type t =
     | Default
     | Force_app_data_redirection
@@ -59,15 +59,16 @@ module Known_folder_flag = struct
     | 13 -> Not_parent_relative
     | 14 -> Simple_idlist
     | 15 -> Alias_only
-    | n -> raise @@ Invalid_argument (Format.sprintf "Known_folder_flag.of_int: %d" n)
+    | n ->
+      raise
+      @@ Invalid_argument (Format.sprintf "Known_folder_flag.of_int: %d" n)
 
   let t = Ctypes.view ~read:of_int ~write:to_int Ctypes.int
 end
 
-(** see https://docs.microsoft.com/en-us/windows/win32/secauthz/access-tokens
- *  as we don't want into troubles, we just bind what we might need... *)
+(** see https://docs.microsoft.com/en-us/windows/win32/secauthz/access-tokens *
+    as we don't want into troubles, we just bind what we might need... *)
 module Token = struct
-
   type t =
     | Default_user
     | Current_user
@@ -84,9 +85,9 @@ module Token = struct
   let t = Ctypes.view ~read:of_int ~write:to_int Ctypes.int
 end
 
-(** see https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values *)
+(** see
+    https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values *)
 module Hresult = struct
-
   type t =
     | S_ok
     | E_abort
@@ -126,13 +127,14 @@ module Hresult = struct
     | 0x8007000El -> E_outofmemory
     | 0x80004003l -> E_pointer
     | 0x8000FFFFl -> E_unexpected
-    | n -> raise @@ Invalid_argument (Format.sprintf "Hresult.of_int: %x" (Int32.to_int n))
+    | n ->
+      raise
+      @@ Invalid_argument (Format.sprintf "Hresult.of_int: %x" (Int32.to_int n))
 
   let t = Ctypes.view ~read:of_int32 ~write:to_int32 Ctypes.int32_t
 end
 
 module GUID = struct
-
   type t =
     | UserProfile
     | LocalApplicationData
@@ -162,24 +164,39 @@ module GUID = struct
   *)
 
   let to_guid = function
-    | UserProfile          -> 0x5E6C858F, 0x0E22, 0x4760, Int64.of_string "0x7371B61733EAFE9A"
-    | LocalApplicationData -> 0xF1B32785, 0x6FBA, 0x4FCF, Int64.of_string "0x9170157F8E7B559D"
-    | ApplicationData      -> 0x3EB685DB, 0x65F9, 0x4CF6, Int64.of_string "0x3D9F7265EFE33AA0"
-    | Music                -> 0x4BD8D571, 0x6D19, 0x48D3, Int64.of_string "0x430E0820224297BE"
-    | Desktop              -> 0xB4BFCC3A, 0xDB2C, 0x424C, Int64.of_string "0x41C6879AE97F29B0"
-    | Documents            -> 0xFDD39AD0, 0x238F, 0x46AF, Int64.of_string "0xC7690348856CB4AD"
-    | Downloads            -> 0x374DE290, 0x123F, 0x4565, Int64.of_string "0x7B465E92C4396491"
-    | Pictures             -> 0x33E28130, 0x4E1E, 0x4676, Int64.of_string "0xBBC33B5C39985A83"
-    | Public               -> 0xDFDF76A2, 0xC82A, 0x4D63, Int64.of_string "0x857345AC44566A90"
-    | Templates            -> 0xA63293E8, 0x664E, 0x48DB, Int64.of_string "0xF709059E75DF79A0"
-    | Videos               -> 0x18989B1D, 0x99B5, 0x455B, Int64.of_string "0xFCDDE4747CAB1C84"
+    | UserProfile ->
+      (0x5E6C858F, 0x0E22, 0x4760, Int64.of_string "0x7371B61733EAFE9A")
+    | LocalApplicationData ->
+      (0xF1B32785, 0x6FBA, 0x4FCF, Int64.of_string "0x9170157F8E7B559D")
+    | ApplicationData ->
+      (0x3EB685DB, 0x65F9, 0x4CF6, Int64.of_string "0x3D9F7265EFE33AA0")
+    | Music -> (0x4BD8D571, 0x6D19, 0x48D3, Int64.of_string "0x430E0820224297BE")
+    | Desktop ->
+      (0xB4BFCC3A, 0xDB2C, 0x424C, Int64.of_string "0x41C6879AE97F29B0")
+    | Documents ->
+      (0xFDD39AD0, 0x238F, 0x46AF, Int64.of_string "0xC7690348856CB4AD")
+    | Downloads ->
+      (0x374DE290, 0x123F, 0x4565, Int64.of_string "0x7B465E92C4396491")
+    | Pictures ->
+      (0x33E28130, 0x4E1E, 0x4676, Int64.of_string "0xBBC33B5C39985A83")
+    | Public ->
+      (0xDFDF76A2, 0xC82A, 0x4D63, Int64.of_string "0x857345AC44566A90")
+    | Templates ->
+      (0xA63293E8, 0x664E, 0x48DB, Int64.of_string "0xF709059E75DF79A0")
+    | Videos ->
+      (0x18989B1D, 0x99B5, 0x455B, Int64.of_string "0xFCDDE4747CAB1C84")
 
   let t : t structure typ = structure "_GUID"
+
   let data1 = field t "Data1" ulong
+
   let data2 = field t "Data2" ushort
+
   let data3 = field t "Data3" ushort
+
   (* let data4 = field t "Data4 (array 8 uchar)"*)
   let data4 = field t "Data4" int64_t
+
   let () = seal t
 
   let to_guid guid =
@@ -191,32 +208,48 @@ module GUID = struct
     setf guid data3 (Unsigned.UShort.of_int d3);
     setf guid data4 d4;
     (* let l = [d4_0; d4_1; d4_2; d4_3; d4_4; d4_5; d4_6; d4_7] in
-    setf guid data4 (CArray.map uchar Unsigned.UChar.of_int (CArray.of_list int l)); *)
+       setf guid data4 (CArray.map uchar Unsigned.UChar.of_int (CArray.of_list int l)); *)
     guid
 end
 
-(** see https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte *)
-let wide_char_to_multi_byte = foreign "WideCharToMultiByte" (int32_t @-> int32_t @-> ptr void @-> int32_t @-> ptr void @-> int32_t @-> ptr void @-> ptr void @-> returning int32_t)
+(** see
+    https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte *)
+let wide_char_to_multi_byte =
+  foreign "WideCharToMultiByte"
+    ( int32_t @-> int32_t @-> ptr void @-> int32_t @-> ptr void @-> int32_t
+    @-> ptr void @-> ptr void @-> returning int32_t )
+
 let wstring_to_string wstr =
-  let path_len = wide_char_to_multi_byte 65001l 0l wstr (-1l) null 0l null null in
+  let path_len =
+    wide_char_to_multi_byte 65001l 0l wstr (-1l) null 0l null null
+  in
   let path = to_voidp (allocate_n char ~count:(Int32.to_int path_len)) in
-  let _ = wide_char_to_multi_byte 65001l 0l wstr (-1l) path path_len null null in
+  let _ =
+    wide_char_to_multi_byte 65001l 0l wstr (-1l) path path_len null null
+  in
   coerce (ptr void) string path
 
-(** see https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath *)
-let shell32 = Dl.dlopen ~flags:[Dl.RTLD_LAZY] ~filename:"SHELL32";;
-let sh_get_known_folder_path = foreign ~from:shell32 "SHGetKnownFolderPath" (GUID.t @-> Known_folder_flag.t @-> Token.t @-> ptr (ptr void) @-> returning Hresult.t)
+(** see
+    https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath *)
+let shell32 = Dl.dlopen ~flags:[ Dl.RTLD_LAZY ] ~filename:"SHELL32"
+
+let sh_get_known_folder_path =
+  foreign ~from:shell32 "SHGetKnownFolderPath"
+    ( GUID.t @-> Known_folder_flag.t @-> Token.t
+    @-> ptr (ptr void)
+    @-> returning Hresult.t )
 
 let get_folderid id =
   let wpath_ptr = allocate (ptr void) null in
-  let result = sh_get_known_folder_path (GUID.to_guid id) Known_folder_flag.Default Token.Current_user wpath_ptr in
+  let result =
+    sh_get_known_folder_path (GUID.to_guid id) Known_folder_flag.Default
+      Token.Current_user wpath_ptr
+  in
   match result with
-  | S_ok -> Some (wstring_to_string (!@ wpath_ptr))
+  | S_ok -> Some (wstring_to_string !@wpath_ptr)
   | _err -> None
 
-
 module Base_dirs () = struct
-
   (** {FOLDERID_UserProfile} *)
   let home_dir : string option = get_folderid GUID.UserProfile
 
@@ -243,7 +276,6 @@ module Base_dirs () = struct
 end
 
 module User_dirs () = struct
-
   module Base_dirs = Base_dirs ()
 
   (** {FOLDERID_UserProfile} *)
@@ -279,16 +311,25 @@ end
 
 module type Project_path = sig
   val qualifier : string
+
   val organization : string
+
   val application : string
 end
 
 module Project_dirs (Project_path : Project_path) = struct
-
   (* TODO: check that the string is valid and format it correctly *)
   let project_path = Project_path.application
 
-  let mk folderid dir = Option.map (fun folderid_path -> folderid_path / project_path / dir) (get_folderid folderid)
+  (* TODO: remove once we drop 4.07 *)
+  let option_map f = function
+    | None -> None
+    | Some v -> Some (f v)
+
+  let mk folderid dir =
+    option_map
+      (fun folderid_path -> folderid_path / project_path / dir)
+      (get_folderid folderid)
 
   (** {FOLDERID_LocalApplicationData}/<project_path>/cache *)
   let cache_dir = mk GUID.LocalApplicationData "cache"
@@ -307,5 +348,4 @@ module Project_dirs (Project_path : Project_path) = struct
 
   (** None *)
   let runtime_dir = None
-
 end

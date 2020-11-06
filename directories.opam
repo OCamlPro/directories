@@ -9,7 +9,7 @@ depends: [
   "dune" {>= "2.0"}
   "ocaml" {>= "4.07.0"}
   "ctypes-foreign" {>= "0.4.0" & (os = "win32" | os = "cygwin")}
-  "ctype" {>= "0.17.1" & (os = "win32" | os = "cygwin")}
+  "ctypes" {>= "0.17.1" & (os = "win32" | os = "cygwin")}
 ]
 build: [
   ["dune" "subst"] {pinned}

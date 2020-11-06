@@ -6,9 +6,9 @@ let os, libs =
   match List.assoc "os_type" ocamlc_config with
   | "Win32" -> "windows", "ctypes ctypes.foreign"
   | _os -> begin match List.assoc "system" ocamlc_config with
-    | "darwin" -> "macos", "unix"
     | "linux" -> "linux", "unix"
-    | _system -> "unix", "unix" (* TODO: fix me *)
+    | "macosx" -> "macos", "unix"
+    | _system -> "linux", "unix" (* TODO: fix me *)
     end
 
 let () =
