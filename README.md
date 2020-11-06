@@ -1,6 +1,6 @@
 # directories [![Actions Status](https://github.com/ocamlpro/directories/workflows/build/badge.svg)](https://github.com/ocamlpro/directories/actions)
 
-directories is an [OCaml] library that provides configuration, cache and data paths (and more!) following the respective conventions on [Linux], [macOS] and [Windows]. It is inspired by similar libraries for other languages such as [directories-jvm].
+directories is an [OCaml] library that provides configuration, cache and data paths (and more!) following the suitable conventions on [Linux], [macOS] and [Windows]. It is inspired by similar libraries for other languages such as [directories-jvm].
 
 The following conventions are used:
 
