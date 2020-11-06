@@ -1,5 +1,5 @@
 let () =
-  (* The windows module *)
+  (* The directories module *)
   let module M = Directories in
   (* The base dirs module *)
   let module B = M.Base_dirs () in
