@@ -1,6 +1,6 @@
 open Ctypes
 open Foreign
-open Common
+open Directories_common.Common
 
 module Known_folder_flag = struct
 

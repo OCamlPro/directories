@@ -1,4 +1,4 @@
-open Common
+open Directories_common.Common
 
 module Base_dirs () = struct
 
