@@ -1,7 +1,7 @@
 open Ctypes
 open Foreign
 
-let ( / ) = Filename.concat
+let (/) = Filename.concat
 
 module Known_folder_flag = struct
 
@@ -195,16 +195,23 @@ module GUID = struct
     guid
 end
 
+(** see https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte *)
+let wide_char_to_multi_byte = foreign "WideCharToMultiByte" (int32_t @-> int32_t @-> ptr void @-> int32_t @-> ptr void @-> int32_t @-> ptr void @-> ptr void @-> returning int32_t)
+let wstring_to_string wstr =
+  let path_len = wide_char_to_multi_byte 65001l 0l wstr (-1l) null 0l null null in
+  let path = to_voidp (allocate_n char ~count:(Int32.to_int path_len)) in
+  let _ = wide_char_to_multi_byte 65001l 0l wstr (-1l) path path_len null null in
+  coerce (ptr void) string path
+
 (** see https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath *)
 let shell32 = Dl.dlopen ~flags:[Dl.RTLD_LAZY] ~filename:"SHELL32";;
-let sh_get_known_folder_path = foreign ~from:shell32 "SHGetKnownFolderPath" (GUID.t @-> Known_folder_flag.t @-> Token.t @-> ptr (ptr string) @-> returning Hresult.t)
+let sh_get_known_folder_path = foreign ~from:shell32 "SHGetKnownFolderPath" (GUID.t @-> Known_folder_flag.t @-> Token.t @-> ptr (ptr void) @-> returning Hresult.t)
 
 let get_folderid id =
-  let path = allocate string "" in
-  let path = allocate (ptr string) path in
-  let result = sh_get_known_folder_path (GUID.to_guid id) Known_folder_flag.Default Token.Current_user path in
+  let wpath_ptr = allocate (ptr void) null in
+  let result = sh_get_known_folder_path (GUID.to_guid id) Known_folder_flag.Default Token.Current_user wpath_ptr in
   match result with
-  | S_ok -> Some (!@(!@path))
+  | S_ok -> Some (wstring_to_string (!@ wpath_ptr))
   | _err -> None
 
 
