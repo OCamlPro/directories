@@ -1,4 +1,13 @@
-open Common
+let relative_opt dir = if Filename.is_relative dir then None else Some dir
+
+let getenvdir env =
+  match Sys.getenv env with
+  | (exception Not_found) | "" ->
+      None
+  | dir ->
+      relative_opt dir
+
+let (/) = Filename.concat
 
 module Base_dirs () = struct
 

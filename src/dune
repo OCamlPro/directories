@@ -1,4 +1,25 @@
+(* -*- tuareg -*- *)
+
+open Jbuild_plugin.V1
+
+let os, libs =
+  match List.assoc "os_type" ocamlc_config with
+  | "Win32" -> "windows", "ctypes ctypes.foreign"
+  | _os -> begin match List.assoc "system" ocamlc_config with
+    | "darwin" -> "macos", "unix"
+    | "linux" -> "linux", "unix"
+    | _system -> "unix", "unix" (* TODO: fix me *)
+    end
+
+let () =
+  Printf.ksprintf send
+    {|
 (library
  (public_name directories)
- (libraries ctypes ctypes.foreign)
- (modules Common Linux Windows Macos))
+ (wrapped false)
+ (modules directories)
+ (libraries %s))
+
+(copy_files# %s/*)
+|}
+  libs os

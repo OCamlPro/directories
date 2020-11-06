@@ -1,6 +1,7 @@
 open Ctypes
 open Foreign
-open Common
+
+let ( / ) = Filename.concat
 
 module Known_folder_flag = struct
 

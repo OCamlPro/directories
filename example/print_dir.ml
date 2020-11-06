@@ -1,6 +1,6 @@
 let () =
   (* The windows module *)
-  let module M = Directories.Windows in
+  let module M = Directories in
 
   (* The base dirs module *)
   let module B = M.Base_dirs () in
