@@ -34,6 +34,6 @@ jobs:
       - run: opam upgrade --fixup
       - run: opam exec -- dune build @install
       - run: opam exec -- dune runtest
-      - run: opam exec -- dune build @example/print_dir.exe
+      - run: opam exec -- dune build example/print_dir.exe
       - run: opam exec -- dune exec example/print_dir.exe
 
