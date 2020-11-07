@@ -10,12 +10,33 @@ The following conventions are used:
 
 On Linux and macOS it has no dependency. On Windows, it depends only on [ctypes].
 
+## Quickstart
+
+You should depend on `directories` then :
+
+```ocaml
+let () =
+  let module App_id = struct
+    let qualifier = "com"
+    let organization = "YourCompany"
+    let application = "yourapp"
+  end in
+  let module M = Directories.Project_dirs (App_id) in
+  let option_value = function None -> "None" | Some v -> v in
+  Format.printf "cache dir  = `%s`@." (option_value M.cache_dir);
+  Format.printf "config dir = `%s`@." (option_value M.config_dir);
+  Format.printf "data dir   = `%s`@." (option_value M.data_dir)
+```
+
+For more, have a look at the [example] folder.
+
 ## About
 
 - [LICENSE]
 - [CHANGELOG]
 
 [CHANGELOG]: ./CHANGES.md
+[example]: ./example/
 [LICENSE]: ./LICENSE.md
 
 [ctypes]: https://github.com/ocamllabs/ocaml-ctypes

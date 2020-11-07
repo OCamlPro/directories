@@ -1,3 +1,9 @@
 (executable
  (name print_dir)
+ (modules print_dir)
+ (libraries directories))
+
+(executable
+ (name quick_start)
+ (modules quick_start)
  (libraries directories))
