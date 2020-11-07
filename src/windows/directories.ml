@@ -286,7 +286,7 @@ module User_dirs () = struct
   let audio_dir = get_folderid GUID.Music
 
   (** {FOLDERID_Desktop} *)
-  let desktop_dir = get_folderid GUID.Music
+  let desktop_dir = get_folderid GUID.Desktop
 
   (** {FOLDERID_Documents} *)
   let document_dir = get_folderid GUID.Documents
