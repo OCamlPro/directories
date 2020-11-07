@@ -96,6 +96,8 @@ module User_dirs () = struct
     | Some v -> Some v
     | None -> option_map (fun dir -> dir / default) home_dir
 
+  (** Defaults can be found here https://cgit.freedesktop.org/xdg/xdg-user-dirs/tree/user-dirs.defaults *)
+
   (** $XDG_MUSIC_DIR *)
   let audio_dir = get_user_dir ("MUSIC", "Music")
 
@@ -106,7 +108,7 @@ module User_dirs () = struct
   let document_dir = get_user_dir ("DOCUMENTS", "Documents")
 
   (** $XDG_DOWNLOAD_DIR *)
-  let download_dir = get_user_dir ("DOWNLOAD", "Download")
+  let download_dir = get_user_dir ("DOWNLOAD", "Downloads")
 
   (** $XDG_DATA_HOME/fonts or $HOME/.local/share/fonts *)
   let font_dir =
