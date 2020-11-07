@@ -56,25 +56,40 @@ module User_dirs () = struct
       user database) *)
   let home_dir = Base_dirs.home_dir
 
-  let user_dirs = option_map (fun dir -> dir / "user-dirs.dirs") Base_dirs.config_dir
-  let user_dirs = option_bind user_dirs (fun f -> if Sys.file_exists f then Some f else None)
-  let user_dirs = option_bind user_dirs (fun f -> if Sys.is_directory f then None else Some f)
+  let user_dirs =
+    option_map (fun dir -> dir / "user-dirs.dirs") Base_dirs.config_dir
+
+  let user_dirs =
+    option_bind user_dirs (fun f ->
+        if Sys.file_exists f then
+          Some f
+        else
+          None)
+
+  let user_dirs =
+    option_bind user_dirs (fun f ->
+        if Sys.is_directory f then
+          None
+        else
+          Some f)
 
   let user_shell = getenv "SHELL"
 
-  let get_user_dir dir = match user_shell, user_dirs with
-  | Some sh, Some f -> begin
-    try
-    let chan = Unix.open_process_in (Format.sprintf "%s -c '. %s && echo \"$XDG_%s_DIR\"'" sh f dir) in
-    let xdg = input_line chan in
-    let result = Unix.close_process_in chan in
-    begin match result with
-    | WEXITED 0 -> Some xdg
+  let get_user_dir dir =
+    match (user_shell, user_dirs) with
+    | Some sh, Some f -> (
+      try
+        let chan =
+          Unix.open_process_in
+            (Format.sprintf "%s -c '. %s && echo \"$XDG_%s_DIR\"'" sh f dir)
+        in
+        let xdg = input_line chan in
+        let result = Unix.close_process_in chan in
+        match result with
+        | WEXITED 0 -> Some xdg
+        | _ -> None
+      with _ -> None )
     | _ -> None
-    end
-    with _ -> None
-    end
-  | _ -> None
 
   let get_user_dir (env, default) =
     match get_user_dir env with

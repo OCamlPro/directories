@@ -2,7 +2,9 @@ let ( / ) = Filename.concat
 
 module type App_id = sig
   val qualifier : string
+
   val organization : string
+
   val application : string
 end
 
@@ -29,5 +31,4 @@ let getenv env =
   | "" -> None
   | v -> Some v
 
-let getenvdir env =
-  option_bind (getenv env) relative_opt
+let getenvdir env = option_bind (getenv env) relative_opt
