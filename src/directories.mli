@@ -1,4 +1,4 @@
-module type Base_dirs = sig
+module Base_dirs () : sig
   val home_dir : string option
   val cache_dir : string option
   val config_dir : string option
@@ -9,7 +9,7 @@ module type Base_dirs = sig
   val executable_dir : string option
 end
 
-module type User_dirs = sig
+module User_dirs () : sig
   val home_dir : string option
   val audio_dir : string option
   val desktop_dir : string option
@@ -22,13 +22,11 @@ module type User_dirs = sig
   val video_dir : string option
 end
 
-module type App_id = sig
+module Project_dirs (App_id : sig
   val qualifier : string
   val organization : string
   val application : string
-end
-
-module type Project_dirs = sig
+end) : sig
   val cache_dir : string option
   val config_dir : string option
   val data_dir : string option
@@ -36,7 +34,3 @@ module type Project_dirs = sig
   val preference_dir : string option
   val runtime_dir : string option
 end
-
-module Base_dirs () : Base_dirs
-module User_dirs () : User_dirs
-module Project_dirs (App_id : App_id) : Project_dirs
