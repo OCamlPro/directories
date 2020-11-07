@@ -2,6 +2,8 @@ open Ctypes
 open Foreign
 open Common
 
+[@@@ocaml.warning "-37"]
+
 module Known_folder_flag = struct
   (** see
       https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/ne-shlobj_core-known_folder_flag *)
@@ -310,7 +312,7 @@ end
 
 module Project_dirs (App_id : App_id) = struct
   (* TODO: check that the string is valid and format it correctly *)
-  let project_path = Project_path.application
+  let project_path = App_id.application
 
   let mk folderid dir =
     option_map
