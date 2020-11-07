@@ -56,17 +56,42 @@ module User_dirs () = struct
       user database) *)
   let home_dir = Base_dirs.home_dir
 
+  let user_dirs = option_map (fun dir -> dir / "user-dirs.dirs") Base_dirs.config_dir
+  let user_dirs = option_bind user_dirs (fun f -> if Sys.file_exists f then Some f else None)
+  let user_dirs = option_bind user_dirs (fun f -> if Sys.is_directory f then None else Some f)
+
+  let user_shell = getenv "SHELL"
+
+  let get_user_dir dir = match user_shell, user_dirs with
+  | Some sh, Some f -> begin
+    try
+    let chan = Unix.open_process_in (Format.sprintf "%s -c '. %s && echo \"$XDG_%s_DIR\"'" sh f dir) in
+    let xdg = input_line chan in
+    let result = Unix.close_process_in chan in
+    begin match result with
+    | WEXITED 0 -> Some xdg
+    | _ -> None
+    end
+    with _ -> None
+    end
+  | _ -> None
+
+  let get_user_dir (env, default) =
+    match get_user_dir env with
+    | Some v -> Some v
+    | None -> option_map (fun dir -> dir / default) home_dir
+
   (** $XDG_MUSIC_DIR *)
-  let audio_dir = getenvdir "XDG_MUSIC_DIR"
+  let audio_dir = get_user_dir ("MUSIC", "Music")
 
   (** $XDG_DESKTOP_DIR *)
-  let desktop_dir = getenvdir "XDG_DESKTOP_DIR"
+  let desktop_dir = get_user_dir ("DESKTOP", "Desktop")
 
   (** $XDG_DOCUMENTS_DIR *)
-  let document_dir = getenvdir "XDG_DOCUMENTS_DIR"
+  let document_dir = get_user_dir ("DOCUMENTS", "Documents")
 
   (** $XDG_DOWNLOAD_DIR *)
-  let download_dir = getenvdir "XDG_DOWNLOAD_DIR"
+  let download_dir = get_user_dir ("DOWNLOAD", "Download")
 
   (** $XDG_DATA_HOME/fonts or $HOME/.local/share/fonts *)
   let font_dir =
@@ -76,16 +101,16 @@ module User_dirs () = struct
     | Some dir -> Some (dir / "fonts")
 
   (** $XDG_PICTURES_DIR *)
-  let picture_dir = getenvdir "XDG_PICTURES_DIR"
+  let picture_dir = get_user_dir ("PICTURES", "Pictures")
 
   (** $XDG_PUBLIC_DIR *)
-  let public_dir = getenvdir "XDG_PUBLICSHARE_DIR"
+  let public_dir = get_user_dir ("PUBLICSHARE", "Public")
 
   (** $XDG_TEMPLATES_DIR *)
-  let template_dir = getenvdir "XDG_TEMPLATES_DIR"
+  let template_dir = get_user_dir ("TEMPLATES", "Templates")
 
   (** $XDG_VIDEOS_DIR *)
-  let video_dir = getenvdir "XDG_VIDEOS_DIR"
+  let video_dir = get_user_dir ("VIDEOS", "Videos")
 end
 
 module Project_dirs (App_id : App_id) = struct
