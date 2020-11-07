@@ -96,7 +96,8 @@ module User_dirs () = struct
     | Some v -> Some v
     | None -> option_map (fun dir -> dir / default) home_dir
 
-  (** Defaults can be found here https://cgit.freedesktop.org/xdg/xdg-user-dirs/tree/user-dirs.defaults *)
+  (** Defaults can be found here
+      https://cgit.freedesktop.org/xdg/xdg-user-dirs/tree/user-dirs.defaults *)
 
   (** $XDG_MUSIC_DIR *)
   let audio_dir = get_user_dir ("MUSIC", "Music")
@@ -133,8 +134,7 @@ end
 module Project_dirs (App_id : App_id) = struct
   module Base_dirs = Base_dirs ()
 
-  (* TODO: check that the string is valid and format it correctly *)
-  let project_path = App_id.application
+  let project_path = Common.lower_and_replace_ws App_id.application ""
 
   let concat_project_path = option_map (fun dir -> dir / project_path)
 
