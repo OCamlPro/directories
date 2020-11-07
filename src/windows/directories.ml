@@ -2,8 +2,6 @@ open Ctypes
 open Foreign
 open Common
 
-[@@@ocaml.warning "-37"]
-
 module Known_folder_flag = struct
   (** see
       https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/ne-shlobj_core-known_folder_flag *)
