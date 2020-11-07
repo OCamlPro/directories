@@ -16,7 +16,7 @@ jobs:
           - ubuntu-latest
           - windows-latest
         ocaml-version:
-          - 4.10.0
+          - 4.11.1
         include:
           - os: ubuntu-latest
             ocaml-version: 4.07.0
@@ -33,10 +33,7 @@ jobs:
       - run: opam install -y ./*.opam --deps-only --with-test
       - run: opam upgrade --fixup
       - run: opam exec -- dune build @install
-      - name: run test suite
-        run: opam exec -- dune build @runtest
-      - name: test source is well formatted
-        run: opam exec -- dune build @fmt
-        continue-on-error: true
-        if: matrix.ocaml-version == '4.10.0' && matrix.os == 'ubuntu-latest'
+      - run: opam exec -- dune runtest
+      - run: opam exec -- dune build @example/print_dir.exe
+      - run: opam exec -- dune exec example/print_dir.exe
 
