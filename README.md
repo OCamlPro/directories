@@ -15,7 +15,7 @@ On Linux and macOS it has no dependency. On Windows, it depends only on [ctypes]
 - [LICENSE]
 - [CHANGELOG]
 
-[CHANGELOG]: ./CHANGELOG.md
+[CHANGELOG]: ./CHANGES.md
 [LICENSE]: ./LICENSE.md
 
 [ctypes]: https://github.com/ocamllabs/ocaml-ctypes
