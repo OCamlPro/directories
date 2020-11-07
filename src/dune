@@ -17,7 +17,8 @@ let () =
 (library
  (public_name directories)
  (wrapped false)
- (modules directories)
+ (modules directories common)
+ (private_modules common)
  (libraries %s))
 
 (copy_files# %s/*)

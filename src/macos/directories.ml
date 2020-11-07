@@ -1,22 +1,3 @@
-let ( / ) = Filename.concat
-
-let relative_opt dir =
-  if Filename.is_relative dir then
-    None
-  else
-    Some dir
-
-let getenvdir env =
-  match Sys.getenv env with
-  | exception Not_found -> None
-  | "" -> None
-  | dir -> relative_opt dir
-
-(* TODO: remove once we drop 4.07 *)
-let option_map f = function
-  | None -> None
-  | Some v -> Some (f v)
-
 module Base_dirs () = struct
   (** $HOME or initial working directory value for the current user (taken from
       user database) *)
@@ -91,20 +72,12 @@ module User_dirs () = struct
   let video_dir = concat_home_dir "Movies"
 end
 
-module type Project_id = sig
-  val qualifier : string
-
-  val organization : string
-
-  val application : string
-end
-
-module Project_dirs (Project_id : Project_id) = struct
+module Project_dirs (App_id : App_id) = struct
   module Base_dirs = Base_dirs ()
 
   (* TODO: check that the string is valid and format it correctly *)
   let project_path =
-    let open Project_id in
+    let open App_id in
     Format.sprintf "%s.%s.%s" qualifier organization application
 
   let concat_project_path = option_map (fun dir -> dir / project_path)

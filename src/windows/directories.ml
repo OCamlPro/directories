@@ -1,8 +1,6 @@
 open Ctypes
 open Foreign
 
-let ( / ) = Filename.concat
-
 module Known_folder_flag = struct
   (** see
       https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/ne-shlobj_core-known_folder_flag *)
@@ -309,22 +307,9 @@ module User_dirs () = struct
   let video_dir = get_folderid GUID.Videos
 end
 
-module type Project_path = sig
-  val qualifier : string
-
-  val organization : string
-
-  val application : string
-end
-
-module Project_dirs (Project_path : Project_path) = struct
+module Project_dirs (App_id : App_id) = struct
   (* TODO: check that the string is valid and format it correctly *)
   let project_path = Project_path.application
-
-  (* TODO: remove once we drop 4.07 *)
-  let option_map f = function
-    | None -> None
-    | Some v -> Some (f v)
 
   let mk folderid dir =
     option_map
