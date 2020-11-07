@@ -309,8 +309,8 @@ module User_dirs () = struct
 end
 
 module Project_dirs (App_id : App_id) = struct
-  (* TODO: check that the string is valid and format it correctly *)
-  let project_path = App_id.application
+  let project_path =
+    Format.sprintf "%s\\%s" App_id.organization App_id.application
 
   let mk folderid dir =
     option_map

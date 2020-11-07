@@ -77,9 +77,13 @@ end
 module Project_dirs (App_id : App_id) = struct
   module Base_dirs = Base_dirs ()
 
-  (* TODO: check that the string is valid and format it correctly *)
+  let qualifier = Common.lower_and_replace_ws App_id.qualifier "-"
+
+  let organization = Common.lower_and_replace_ws App_id.organization "-"
+
+  let application = Common.lower_and_replace_ws App_id.application "-"
+
   let project_path =
-    let open App_id in
     Format.sprintf "%s.%s.%s" qualifier organization application
 
   let concat_project_path = option_map (fun dir -> dir / project_path)
