@@ -1,5 +1,6 @@
 open Ctypes
 open Foreign
+open Common
 
 module Known_folder_flag = struct
   (** see

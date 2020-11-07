@@ -1,3 +1,5 @@
+open Common
+
 module Base_dirs () = struct
   (** $HOME or initial working directory value for the current user (taken from
       user database) *)
