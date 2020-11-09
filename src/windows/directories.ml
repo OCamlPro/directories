@@ -101,17 +101,17 @@ module Hresult = struct
     | E_unexpected
 
   let to_int32 = function
-    | S_ok -> Int32.of_string "0x00000000"
-    | E_abort -> Int32.of_string "0x80004004"
-    | E_accessdenied -> Int32.of_string "0x80070005"
-    | E_fail -> Int32.of_string "0x80004005"
-    | E_handle -> Int32.of_string "0x80070006"
-    | E_invalid_arg -> Int32.of_string "0x80070057"
-    | E_nointerface -> Int32.of_string "0x80004002"
-    | E_notimpl -> Int32.of_string "0x80004001"
-    | E_outofmemory -> Int32.of_string "0x8007000E"
-    | E_pointer -> Int32.of_string "0x80004003"
-    | E_unexpected -> Int32.of_string "0x8000FFFF"
+    | S_ok ->           0x00000000l
+    | E_abort ->        0x80004004l
+    | E_accessdenied -> 0x80070005l
+    | E_fail ->         0x80004005l
+    | E_handle ->       0x80070006l
+    | E_invalid_arg ->  0x80070057l
+    | E_nointerface ->  0x80004002l
+    | E_notimpl ->      0x80004001l
+    | E_outofmemory ->  0x8007000El
+    | E_pointer ->      0x80004003l
+    | E_unexpected ->   0x8000FFFFl
 
   let of_int32 (n : Int32.t) =
     match n with
@@ -163,27 +163,17 @@ module GUID = struct
   *)
 
   let to_guid = function
-    | UserProfile ->
-      (0x5E6C858F, 0x0E22, 0x4760, Int64.of_string "0x7371B61733EAFE9A")
-    | LocalApplicationData ->
-      (0xF1B32785, 0x6FBA, 0x4FCF, Int64.of_string "0x9170157F8E7B559D")
-    | ApplicationData ->
-      (0x3EB685DB, 0x65F9, 0x4CF6, Int64.of_string "0x3D9F7265EFE33AA0")
-    | Music -> (0x4BD8D571, 0x6D19, 0x48D3, Int64.of_string "0x430E0820224297BE")
-    | Desktop ->
-      (0xB4BFCC3A, 0xDB2C, 0x424C, Int64.of_string "0x41C6879AE97F29B0")
-    | Documents ->
-      (0xFDD39AD0, 0x238F, 0x46AF, Int64.of_string "0xC7690348856CB4AD")
-    | Downloads ->
-      (0x374DE290, 0x123F, 0x4565, Int64.of_string "0x7B465E92C4396491")
-    | Pictures ->
-      (0x33E28130, 0x4E1E, 0x4676, Int64.of_string "0xBBC33B5C39985A83")
-    | Public ->
-      (0xDFDF76A2, 0xC82A, 0x4D63, Int64.of_string "0x857345AC44566A90")
-    | Templates ->
-      (0xA63293E8, 0x664E, 0x48DB, Int64.of_string "0xF709059E75DF79A0")
-    | Videos ->
-      (0x18989B1D, 0x99B5, 0x455B, Int64.of_string "0xFCDDE4747CAB1C84")
+    | UserProfile ->          (0x5E6C858F, 0x0E22, 0x4760, 0x7371B61733EAFE9AL)
+    | LocalApplicationData -> (0xF1B32785, 0x6FBA, 0x4FCF, 0x9170157F8E7B559DL)
+    | ApplicationData ->      (0x3EB685DB, 0x65F9, 0x4CF6, 0x3D9F7265EFE33AA0L)
+    | Music ->                (0x4BD8D571, 0x6D19, 0x48D3, 0x430E0820224297BEL)
+    | Desktop ->              (0xB4BFCC3A, 0xDB2C, 0x424C, 0x41C6879AE97F29B0L)
+    | Documents ->            (0xFDD39AD0, 0x238F, 0x46AF, 0xC7690348856CB4ADL)
+    | Downloads ->            (0x374DE290, 0x123F, 0x4565, 0x7B465E92C4396491L)
+    | Pictures ->             (0x33E28130, 0x4E1E, 0x4676, 0xBBC33B5C39985A83L)
+    | Public ->               (0xDFDF76A2, 0xC82A, 0x4D63, 0x857345AC44566A90L)
+    | Templates ->            (0xA63293E8, 0x664E, 0x48DB, 0xF709059E75DF79A0L)
+    | Videos ->               (0x18989B1D, 0x99B5, 0x455B, 0xFCDDE4747CAB1C84L)
 
   let t : t structure typ = structure "_GUID"
 
