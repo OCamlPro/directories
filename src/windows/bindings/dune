@@ -1,0 +1,55 @@
+(* -*- tuareg -*- *)
+
+open Jbuild_plugin.V1
+
+let is_windows =
+  match List.assoc "os_type" ocamlc_config with
+  | "Win32" -> true
+  | _os -> false
+
+let () =
+  if not is_windows then
+    Printf.ksprintf send ""
+  else
+    Printf.ksprintf send "%s"
+    {|
+
+(library
+ (name win_types)
+ (public_name directories.win_types)
+ (modules win_types)
+ (libraries ctypes)
+ (wrapped false))
+
+(library
+ (name win_functions_functor)
+ (public_name directories.win_functions_functor)
+ (modules win_functions_functor)
+ (libraries win_types ctypes ctypes.stubs)
+ (wrapped false))
+
+(executable
+ (name gen_functions)
+ (modules gen_functions)
+ (libraries win_functions_functor ctypes ctypes.stubs))
+
+(rule
+ (target win_functions_c_stubs.c)
+ (deps gen_functions.exe)
+ (action (with-stdout-to %{target} (run %{deps} c))))
+
+(rule
+ (target win_functions_stubs.ml)
+ (deps gen_functions.exe)
+ (action (with-stdout-to %{target} (run %{deps} ml))))
+
+(library
+ (name win_functions)
+ (public_name directories.win_functions)
+ (modules win_functions_stubs win_functions)
+ (libraries win_functions_functor win_types ctypes ctypes.stubs)
+ (foreign_stubs (language c) (names win_functions_c_stubs))
+ (c_library_flags (:standard -lkernel32 -lshell32))
+ (wrapped false))
+ 
+|}
