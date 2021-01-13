@@ -4,7 +4,7 @@ open Jbuild_plugin.V1
 
 let os, libs =
   match List.assoc "os_type" ocamlc_config with
-  | "Win32" -> "windows", "ctypes ctypes.foreign"
+  | "Win32" -> "windows", "ctypes ctypes.stubs win_types win_functions"
   | _os -> begin match List.assoc "system" ocamlc_config with
     | "linux" -> "linux", "unix"
     | "macosx" -> "macos", "unix"
