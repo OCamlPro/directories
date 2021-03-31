@@ -1,3 +1,8 @@
+## 0.3 - 2021-03-31
+
+- use ctypes.stubs instead of ctypes.foreign on windows
+- clean the windows implementation
+
 ## 0.2 - 2020-11-09
 
 - fix opam file
