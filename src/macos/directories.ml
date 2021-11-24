@@ -1,4 +1,4 @@
-open Common
+open Directories_common
 
 module Base_dirs () = struct
   (** $HOME or initial working directory value for the current user (taken from
@@ -77,11 +77,11 @@ end
 module Project_dirs (App_id : App_id) = struct
   module Base_dirs = Base_dirs ()
 
-  let qualifier = Common.lower_and_replace_ws App_id.qualifier "-"
+  let qualifier = Directories_common.lower_and_replace_ws App_id.qualifier "-"
 
-  let organization = Common.lower_and_replace_ws App_id.organization "-"
+  let organization = Directories_common.lower_and_replace_ws App_id.organization "-"
 
-  let application = Common.lower_and_replace_ws App_id.application "-"
+  let application = Directories_common.lower_and_replace_ws App_id.application "-"
 
   let project_path =
     Format.sprintf "%s.%s.%s" qualifier organization application

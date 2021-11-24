@@ -4,9 +4,9 @@ module Apply (F : Cstubs.FOREIGN) = struct
   open Ctypes
   open F
   open Win_types
-  
+
   module Kernel32 = struct
-  
+
   (** see
       https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte *)
 
@@ -24,7 +24,7 @@ module Apply (F : Cstubs.FOREIGN) = struct
       )
 
   end
-  
+
   module Shell32 = struct
 
   (** see

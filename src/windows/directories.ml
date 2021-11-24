@@ -1,5 +1,5 @@
 open Ctypes
-open Common
+open Directories_common
 open Win_types
 open Win_functions
 

@@ -51,5 +51,5 @@ let () =
  (foreign_stubs (language c) (names win_functions_c_stubs))
  (c_library_flags (:standard -lkernel32 -lshell32))
  (wrapped false))
- 
+
 |}
