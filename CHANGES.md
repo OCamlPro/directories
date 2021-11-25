@@ -1,3 +1,7 @@
+## 0.4 - 2021-11-25
+
+- rename module Common to Directories_common
+
 ## 0.3 - 2021-03-31
 
 - use ctypes.stubs instead of ctypes.foreign on windows
