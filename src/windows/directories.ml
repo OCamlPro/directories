@@ -48,6 +48,8 @@ module Base_dirs () = struct
   (** None *)
   let runtime_dir = None
 
+  let state_dir = cache_dir
+
   (** None *)
   let executable_dir = None
 end
@@ -109,6 +111,8 @@ module Project_dirs (App_id : App_id) = struct
 
   (** {FOLDERID_ApplicationData}/<project_path>/config *)
   let preference_dir = mk GUID.ApplicationData "config"
+
+  let state_dir = cache_dir
 
   (** None *)
   let runtime_dir = None

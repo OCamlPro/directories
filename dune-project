@@ -2,8 +2,6 @@
 
 (name directories)
 
-(version 0.2)
-
 (license ISC)
 
 (authors "OCamlPro <contact@ocamlpro.com>")

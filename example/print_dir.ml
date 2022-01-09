@@ -32,6 +32,7 @@ let () =
     ; B.data_local_dir, "data_local_dir:"
     ; B.preference_dir, "preference_dir:"
     ; B.runtime_dir,    "runtime_dir:   "
+    ; B.state_dir,      "state_dir:     "
     ; B.executable_dir, "executable_dir:"
     ];
 
@@ -58,5 +59,6 @@ let () =
     ; P.data_dir,       "data_dir:      "
     ; P.data_local_dir, "data_local_dir:"
     ; P.preference_dir, "preference_dir:"
+    ; P.state_dir,      "state_dir:     "
     ; P.runtime_dir,    "runtime_dir:   "
     ]

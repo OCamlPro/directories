@@ -36,6 +36,12 @@ module Base_dirs () = struct
   (** $XDG_CONFIG_HOME or $HOME/.config *)
   let preference_dir = config_dir
 
+  (** $XDG_STATE_HOME or $HOME/.local/state *)
+  let state_dir =
+    match getenvdir "XDG_STATE_HOME" with
+    | None -> option_map (fun dir -> dir / ".local" / "state") home_dir
+    | Some _dir as dir -> dir
+
   (** $XDG_RUNTIME_DIR *)
   let runtime_dir = getenvdir "XDG_RUNTIME_DIR"
 
@@ -152,6 +158,9 @@ module Project_dirs (App_id : App_id) = struct
 
   (** $XDG_CONFIG_HOME/<project_path> or $HOME/.config/<project_path> *)
   let preference_dir = config_dir
+
+  (** $XDG_STATE_HOME/<project_path> or $HOME/.local/state/<project_path> *)
+  let state_dir = concat_project_path Base_dirs.state_dir
 
   (** $XDG_RUNTIME_DIR/<project_path> *)
   let runtime_dir = concat_project_path Base_dirs.runtime_dir

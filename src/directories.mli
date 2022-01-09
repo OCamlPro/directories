@@ -6,6 +6,7 @@ module Base_dirs () : sig
   val data_local_dir : string option
   val preference_dir : string option
   val runtime_dir : string option
+  val state_dir : string option
   val executable_dir : string option
 end
 
@@ -33,4 +34,5 @@ end) : sig
   val data_local_dir : string option
   val preference_dir : string option
   val runtime_dir : string option
+  val state_dir : string option
 end
