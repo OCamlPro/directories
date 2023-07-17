@@ -1,4 +1,3 @@
-
 let print_defines fmt =
   List.iter (fun (d, v) -> Format.fprintf fmt "#define %s (%s)@\n" d v)
 
@@ -24,6 +23,6 @@ let make_functions_stubs
 
 let () =
   make_functions_stubs
-    [ "NTDDI_VERSION", "NTDDI_VISTA" ]
+    [ "NTDDI_VERSION", "NTDDI_VISTA"; "_WIN32_WINNT", "_WIN32_WINNT_VISTA" ]
     [ "windows.h"; "shlobj.h" ]
     (module Win_functions_functor.Apply)
