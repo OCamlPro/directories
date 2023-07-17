@@ -1,7 +1,9 @@
 let () =
   let module App_id = struct
     let qualifier = "com"
+
     let organization = "YourCompany"
+
     let application = "yourapp"
   end in
   let module M = Directories.Project_dirs (App_id) in

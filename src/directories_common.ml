@@ -9,21 +9,12 @@ module type App_id = sig
 end
 
 (* TODO: remove once we drop 4.07 *)
-let option_map f = function
-  | None -> None
-  | Some v -> Some (f v)
+let option_map f = function None -> None | Some v -> Some (f v)
 
 (* TODO: remove once we drop 4.07 *)
-let option_bind o f =
-  match o with
-  | None -> None
-  | Some v -> f v
+let option_bind o f = match o with None -> None | Some v -> f v
 
-let relative_opt dir =
-  if Filename.is_relative dir then
-    None
-  else
-    Some dir
+let relative_opt dir = if Filename.is_relative dir then None else Some dir
 
 let getenv env =
   match Sys.getenv env with
@@ -39,15 +30,10 @@ let lower_and_replace_ws s replace =
   let should_replace = ref false in
   for i = 0 to String.length s - 1 do
     match s.[i] with
-    | ' '
-    | '\012'
-    | '\n'
-    | '\r'
-    | '\t' ->
+    | ' ' | '\012' | '\n' | '\r' | '\t' ->
       if !should_replace then (
         Buffer.add_string buff replace;
-        should_replace := false
-      )
+        should_replace := false )
     | c ->
       Buffer.add_char buff c;
       should_replace := true

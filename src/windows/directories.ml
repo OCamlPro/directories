@@ -5,13 +5,13 @@ open Win_functions
 
 let wstring_to_string wstr =
   let path_len =
-    Kernel32.wide_char_to_multi_byte
-	  65001l 0l wstr (-1l) LPSTR.null 0l LPCH.null LPBOOL.null
+    Kernel32.wide_char_to_multi_byte 65001l 0l wstr (-1l) LPSTR.null 0l
+      LPCH.null LPBOOL.null
   in
   let path = allocate_n CHAR.t ~count:(Int32.to_int path_len) in
   let _ =
-    Kernel32.wide_char_to_multi_byte
-	  65001l 0l wstr (-1l) path path_len LPCH.null LPBOOL.null
+    Kernel32.wide_char_to_multi_byte 65001l 0l wstr (-1l) path path_len
+      LPCH.null LPBOOL.null
   in
   coerce LPSTR.t string path
 
@@ -19,8 +19,8 @@ let get_folderid id =
   let wpath_ptr = allocate PWSTR.t PWSTR.null in
   let result =
     Shell32.sh_get_known_folder_path
-	  (addr (GUID.to_guid id)) Known_folder_flag.Default
-	  Token.Current_user wpath_ptr
+      (addr (GUID.to_guid id))
+      Known_folder_flag.Default Token.Current_user wpath_ptr
   in
   match result with
   | S_ok -> Some (wstring_to_string !@wpath_ptr)

@@ -81,9 +81,11 @@ module Project_dirs (App_id : App_id) = struct
 
   let qualifier = Directories_common.lower_and_replace_ws App_id.qualifier "-"
 
-  let organization = Directories_common.lower_and_replace_ws App_id.organization "-"
+  let organization =
+    Directories_common.lower_and_replace_ws App_id.organization "-"
 
-  let application = Directories_common.lower_and_replace_ws App_id.application "-"
+  let application =
+    Directories_common.lower_and_replace_ws App_id.application "-"
 
   let project_path =
     Format.sprintf "%s.%s.%s" qualifier organization application

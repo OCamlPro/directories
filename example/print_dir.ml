@@ -25,40 +25,40 @@ let () =
   (* Printing base dirs *)
   Format.printf "* Base dirs:@.";
   print_dirs
-    [ B.home_dir,       "home_dir:      "
-    ; B.cache_dir,      "cache_dir:     "
-    ; B.config_dir,     "config_dir:    "
-    ; B.data_dir,       "data_dir:      "
-    ; B.data_local_dir, "data_local_dir:"
-    ; B.preference_dir, "preference_dir:"
-    ; B.runtime_dir,    "runtime_dir:   "
-    ; B.state_dir,      "state_dir:     "
-    ; B.executable_dir, "executable_dir:"
+    [ (B.home_dir, "home_dir:      ")
+    ; (B.cache_dir, "cache_dir:     ")
+    ; (B.config_dir, "config_dir:    ")
+    ; (B.data_dir, "data_dir:      ")
+    ; (B.data_local_dir, "data_local_dir:")
+    ; (B.preference_dir, "preference_dir:")
+    ; (B.runtime_dir, "runtime_dir:   ")
+    ; (B.state_dir, "state_dir:     ")
+    ; (B.executable_dir, "executable_dir:")
     ];
 
   (* Printing user dirs *)
   Format.printf "* User dirs:@.";
   print_dirs
-    [ U.home_dir,     "home_dir:      "
-    ; U.audio_dir,    "audio_dir:     "
-    ; U.desktop_dir,  "desktop_dir:   "
-    ; U.document_dir, "document_dir:  "
-    ; U.download_dir, "download_dir:  "
-    ; U.font_dir,     "font_dir:      "
-    ; U.picture_dir,  "picture_dir:   "
-    ; U.public_dir,   "public_dir:    "
-    ; U.template_dir, "template_dir:  "
-    ; U.video_dir,    "video_dir:     "
+    [ (U.home_dir, "home_dir:      ")
+    ; (U.audio_dir, "audio_dir:     ")
+    ; (U.desktop_dir, "desktop_dir:   ")
+    ; (U.document_dir, "document_dir:  ")
+    ; (U.download_dir, "download_dir:  ")
+    ; (U.font_dir, "font_dir:      ")
+    ; (U.picture_dir, "picture_dir:   ")
+    ; (U.public_dir, "public_dir:    ")
+    ; (U.template_dir, "template_dir:  ")
+    ; (U.video_dir, "video_dir:     ")
     ];
 
   (* Printing project dirs*)
   Format.printf "* Project dirs:@.";
   print_dirs
-    [ P.cache_dir,      "cache_dir:     "
-    ; P.config_dir,     "config_dir:    "
-    ; P.data_dir,       "data_dir:      "
-    ; P.data_local_dir, "data_local_dir:"
-    ; P.preference_dir, "preference_dir:"
-    ; P.state_dir,      "state_dir:     "
-    ; P.runtime_dir,    "runtime_dir:   "
+    [ (P.cache_dir, "cache_dir:     ")
+    ; (P.config_dir, "config_dir:    ")
+    ; (P.data_dir, "data_dir:      ")
+    ; (P.data_local_dir, "data_local_dir:")
+    ; (P.preference_dir, "preference_dir:")
+    ; (P.state_dir, "state_dir:     ")
+    ; (P.runtime_dir, "runtime_dir:   ")
     ]
