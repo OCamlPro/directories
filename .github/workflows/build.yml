@@ -15,25 +15,29 @@ jobs:
           - macos-latest
           - ubuntu-latest
           - windows-latest
-        ocaml-version:
-          - 4.11.1
+        ocaml-compiler:
+          - "5.0"
         include:
           - os: ubuntu-latest
-            ocaml-version: 4.07.0
+            ocaml-compiler: "4.07"
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Use OCaml ${{ matrix.ocaml-version }}
-        uses: avsm/setup-ocaml@v1
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup-ocaml
+        uses: ocaml/setup-ocaml@v2
         with:
-          ocaml-version: ${{ matrix.ocaml-version }}
-      - run: opam pin add . -y --no-action
-      - run: opam depext -y directories
-      - run: opam install -y ./*.opam --deps-only --with-test
-      - run: opam upgrade --fixup
-      - run: opam exec -- dune build @install
-      - run: opam exec -- dune runtest
-      - run: opam exec -- dune build example/print_dir.exe
-      - run: opam exec -- dune exec example/print_dir.exe
-
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+      - name: setup
+        run: |
+          opam pin add . -y --no-action
+          opam depext -y directories
+          opam install -y ./*.opam --deps-only --with-test
+          opam upgrade --fixup
+      - name: build
+        run: opam exec -- dune build @install
+      - name: test
+        run: |
+          opam exec -- dune runtest
+          opam exec -- dune build example/print_dir.exe
+          opam exec -- dune exec example/print_dir.exe
