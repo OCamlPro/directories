@@ -91,7 +91,8 @@ end
 module PWSTR = LPWSTR
 
 (** see
-    https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/ne-shlobj_core-known_folder_flag *)
+    https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/ne-shlobj_core-known_folder_flag
+*)
 module Known_folder_flag = struct
   type t =
     | Default
@@ -171,7 +172,8 @@ module Token = struct
 end
 
 (** see
-    https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values *)
+    https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values
+*)
 module Hresult = struct
   type t =
     | S_ok

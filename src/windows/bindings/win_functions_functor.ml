@@ -5,7 +5,8 @@ module Apply (F : Cstubs.FOREIGN) = struct
 
   module Kernel32 = struct
     (** see
-        https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte *)
+        https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte
+    *)
 
     let wide_char_to_multi_byte =
       foreign "WideCharToMultiByte"
@@ -22,13 +23,15 @@ module Apply (F : Cstubs.FOREIGN) = struct
         @-> LPCH.t
         (* LPCCH  lpDefaultChar *)
         @-> LPBOOL.t
-        @-> (* LPBOOL lpUsedDefaultChar *)
+        @->
+        (* LPBOOL lpUsedDefaultChar *)
         returning Int.t (* int *) )
   end
 
   module Shell32 = struct
     (** see
-        https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath *)
+        https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath
+    *)
 
     let sh_get_known_folder_path =
       foreign "SHGetKnownFolderPath"
@@ -39,7 +42,8 @@ module Apply (F : Cstubs.FOREIGN) = struct
         @-> Token.t
         (* HANDLE           hToken   (= void * ) *)
         @-> ptr PWSTR.t
-        @-> (* PWSTR *          ppszPath (= short unsigned int ** ) *)
+        @->
+        (* PWSTR *          ppszPath (= short unsigned int ** ) *)
         returning Hresult.t (* HRESULT *) )
   end
 end
