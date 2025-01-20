@@ -9,25 +9,27 @@ module Base_dirs () = struct
       match (Unix.getpwuid (Unix.getuid ())).Unix.pw_dir with
       | exception Unix.Unix_error _ -> None
       | exception Not_found -> None
-      | dir -> relative_opt dir )
+      | dir ->
+        let dir = Fpath.of_string dir |> Result.to_option in
+        Option.bind dir relative_opt )
     | Some _dir as dir -> dir
 
   (** $XDG_CACHE_HOME or $HOME/.cache *)
   let cache_dir =
     match getenvdir "XDG_CACHE_HOME" with
-    | None -> option_map (fun dir -> dir / ".cache") home_dir
+    | None -> Option.map (fun dir -> Fpath.(dir / ".cache")) home_dir
     | Some _dir as dir -> dir
 
   (** $XDG_CONFIG_HOME or $HOME/.config *)
   let config_dir =
     match getenvdir "XDG_CONFIG_DIR" with
-    | None -> option_map (fun dir -> dir / ".config") home_dir
+    | None -> Option.map (fun dir -> Fpath.(dir / ".config")) home_dir
     | Some _dir as dir -> dir
 
   (** $XDG_DATA_HOME or $HOME/.local/share *)
   let data_dir =
     match getenvdir "XDG_DATA_DIR" with
-    | None -> option_map (fun dir -> dir / ".local" / "share") home_dir
+    | None -> Option.map (fun dir -> Fpath.(dir / ".local" / "share")) home_dir
     | Some _dir as dir -> dir
 
   (** $XDG_DATA_HOME or $HOME/.local/share *)
@@ -39,7 +41,7 @@ module Base_dirs () = struct
   (** $XDG_STATE_HOME or $HOME/.local/state *)
   let state_dir =
     match getenvdir "XDG_STATE_HOME" with
-    | None -> option_map (fun dir -> dir / ".local" / "state") home_dir
+    | None -> Option.map (fun dir -> Fpath.(dir / ".local" / "state")) home_dir
     | Some _dir as dir -> dir
 
   (** $XDG_RUNTIME_DIR *)
@@ -50,8 +52,8 @@ module Base_dirs () = struct
     match getenvdir "XDG_BIN_HOME" with
     | None -> (
       match getenvdir "XDG_DATA_HOME" with
-      | None -> option_map (fun dir -> dir / ".local" / "bin") home_dir
-      | Some dir -> Some (dir / ".." / "bin") )
+      | None -> Option.map (fun dir -> Fpath.(dir / ".local" / "bin")) home_dir
+      | Some dir -> Some Fpath.(dir / ".." / "bin") )
     | Some _dir as dir -> dir
 end
 
@@ -63,14 +65,17 @@ module User_dirs () = struct
   let home_dir = Base_dirs.home_dir
 
   let user_dirs =
-    option_map (fun dir -> dir / "user-dirs.dirs") Base_dirs.config_dir
+    Option.map (fun dir -> Fpath.(dir / "user-dirs.dirs")) Base_dirs.config_dir
 
   let user_dirs =
-    option_bind user_dirs (fun f -> if Sys.file_exists f then Some f else None)
+    Option.bind user_dirs (fun f ->
+      (* TODO: use Bos here instead of Sys? *)
+      if Sys.file_exists (Fpath.to_string f) then Some f else None )
 
   let user_dirs =
-    option_bind user_dirs (fun f ->
-      if Sys.is_directory f then None else Some f )
+    Option.bind user_dirs (fun f ->
+      (* TODO: use Bos here instead of Sys? *)
+      if Sys.is_directory (Fpath.to_string f) then None else Some f )
 
   let user_shell = getenv "SHELL"
 
@@ -80,18 +85,23 @@ module User_dirs () = struct
       try
         let chan =
           Unix.open_process_in
-            (Format.sprintf "%s -c '. %s && echo \"$XDG_%s_DIR\"'" sh f dir)
+            (Format.asprintf "%s -c '. %a && echo \"$XDG_%s_DIR\"'" sh Fpath.pp
+               f dir )
         in
         let xdg = input_line chan in
         let result = Unix.close_process_in chan in
-        match result with WEXITED 0 -> Some xdg | _ -> None
+        match result with
+        | WEXITED 0 -> begin
+          match Fpath.of_string xdg with Error _ -> None | Ok xdg -> Some xdg
+        end
+        | _ -> None
       with _ -> None )
     | _ -> None
 
   let get_user_dir (env, default) =
     match get_user_dir env with
     | Some v -> Some v
-    | None -> option_map (fun dir -> dir / default) home_dir
+    | None -> Option.map (fun dir -> Fpath.(dir / default)) home_dir
 
   (** Defaults can be found here
       https://cgit.freedesktop.org/xdg/xdg-user-dirs/tree/user-dirs.defaults *)
@@ -112,8 +122,10 @@ module User_dirs () = struct
   let font_dir =
     match getenvdir "XDG_DATA_HOME" with
     | None ->
-      option_map (fun dir -> dir / ".local" / "share" / "fonts") home_dir
-    | Some dir -> Some (dir / "fonts")
+      Option.map
+        (fun dir -> Fpath.(dir / ".local" / "share" / "fonts"))
+        home_dir
+    | Some dir -> Some Fpath.(dir / "fonts")
 
   (** $XDG_PICTURES_DIR *)
   let picture_dir = get_user_dir ("PICTURES", "Pictures")
@@ -134,7 +146,7 @@ module Project_dirs (App_id : App_id) = struct
   let project_path =
     Directories_common.lower_and_replace_ws App_id.application ""
 
-  let concat_project_path = option_map (fun dir -> dir / project_path)
+  let concat_project_path = Option.map (fun dir -> Fpath.(dir / project_path))
 
   (** $XDG_CACHE_HOME/<project_path> or $HOME/.cache/<project_path> *)
   let cache_dir = concat_project_path Base_dirs.cache_dir

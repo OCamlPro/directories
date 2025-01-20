@@ -1,3 +1,7 @@
+## unreleased
+
+- use `Fpath.t` instead of `string` where possible
+
 ## 0.5 - 2022-01-09
 
 - add Base_dirs.state_dir, on linux it uses $XDG_STATE_HOME and default to $HOME/.local/.state on macOS and Windows it's equivalent to Base_dirs.cache_dir ; add Projects_dirs.state_dir

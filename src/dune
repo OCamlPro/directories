@@ -19,7 +19,7 @@ let () =
  (wrapped false)
  (modules directories directories_common)
  (private_modules directories_common)
- (libraries %s))
+ (libraries fpath %s))
 
 (copy_files# %s/*)
 |}

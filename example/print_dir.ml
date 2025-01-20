@@ -18,7 +18,7 @@ let () =
   (* functions to print a dir path *)
   let print_dir = function
     | None, s -> Format.printf "  %s None@." s
-    | Some dir, s -> Format.printf "  %s Some `%s`@." s dir
+    | Some dir, s -> Format.printf "  %s Some `%a`@." s Fpath.pp dir
   in
   let print_dirs = List.iter print_dir in
 

@@ -23,26 +23,28 @@ let get_folderid id =
       Known_folder_flag.Default Token.Current_user wpath_ptr
   in
   match result with
-  | S_ok -> Some (wstring_to_string !@wpath_ptr)
+  | S_ok ->
+    let s = wstring_to_string !@wpath_ptr in
+    Fpath.of_string s |> Result.to_option
   | _err -> None
 
 module Base_dirs () = struct
-  (** {FOLDERID_UserProfile} *)
-  let home_dir : string option = get_folderid GUID.UserProfile
+  (** `FOLDERID_UserProfile` *)
+  let home_dir : Fpath.t option = get_folderid GUID.UserProfile
 
-  (** {FOLDERID_LocalApplicationData} *)
+  (** `FOLDERID_LocalApplicationData` *)
   let cache_dir = get_folderid GUID.LocalApplicationData
 
-  (** {FOLDERID_ApplicationData} *)
+  (** `FOLDERID_ApplicationData` *)
   let config_dir = get_folderid GUID.ApplicationData
 
-  (** {FOLDERID_ApplicationData} *)
+  (** `FOLDERID_ApplicationData` *)
   let data_dir = get_folderid GUID.ApplicationData
 
-  (** {FOLDERID_LocalApplicationData} *)
+  (** `FOLDERID_LocalApplicationData` *)
   let data_local_dir = get_folderid GUID.LocalApplicationData
 
-  (** {FOLDERID_ApplicationData} *)
+  (** `FOLDERID_ApplicationData` *)
   let preference_dir = get_folderid GUID.ApplicationData
 
   (** None *)
@@ -57,59 +59,57 @@ end
 module User_dirs () = struct
   module Base_dirs = Base_dirs ()
 
-  (** {FOLDERID_UserProfile} *)
+  (** `FOLDERID_UserProfile` *)
   let home_dir = Base_dirs.home_dir
 
-  (** {FOLDERID_Music} *)
+  (** `FOLDERID_Music` *)
   let audio_dir = get_folderid GUID.Music
 
-  (** {FOLDERID_Desktop} *)
+  (** `FOLDERID_Desktop` *)
   let desktop_dir = get_folderid GUID.Desktop
 
-  (** {FOLDERID_Documents} *)
+  (** `FOLDERID_Documents` *)
   let document_dir = get_folderid GUID.Documents
 
-  (** {FOLDERID_Downloads} *)
+  (** `FOLDERID_Downloads` *)
   let download_dir = get_folderid GUID.Downloads
 
   (** None *)
   let font_dir = None
 
-  (** {FOLDERID_Pictures} *)
+  (** `FOLDERID_Pictures` *)
   let picture_dir = get_folderid GUID.Pictures
 
-  (** {FOLDERID_Public} *)
+  (** `FOLDERID_Public` *)
   let public_dir = get_folderid GUID.Public
 
-  (** {FOLDERID_Templates} *)
+  (** `FOLDERID_Templates` *)
   let template_dir = get_folderid GUID.Templates
 
-  (** {FOLDERID_Videos} *)
+  (** `FOLDERID_Videos` *)
   let video_dir = get_folderid GUID.Videos
 end
 
 module Project_dirs (App_id : App_id) = struct
-  let project_path =
-    Format.sprintf "%s\\%s" App_id.organization App_id.application
-
   let mk folderid dir =
-    option_map
-      (fun folderid_path -> folderid_path / project_path / dir)
+    Option.map
+      (fun folderid_path ->
+        Fpath.(folderid_path / App_id.organization / App_id.application / dir) )
       (get_folderid folderid)
 
-  (** {FOLDERID_LocalApplicationData}/<project_path>/cache *)
+  (** `FOLDERID_LocalApplicationData`/<project_path>/cache *)
   let cache_dir = mk GUID.LocalApplicationData "cache"
 
-  (** {FOLDERID_ApplicationData}/<project_path>/config *)
+  (** `FOLDERID_ApplicationData`/<project_path>/config *)
   let config_dir = mk GUID.ApplicationData "config"
 
-  (** {FOLDERID_ApplicationData}/<project_path>/data *)
+  (** `FOLDERID_ApplicationData`/<project_path>/data *)
   let data_dir = mk GUID.ApplicationData "data"
 
-  (** {FOLDERID_LocalApplicationData}/<project_path>/data *)
+  (** `FOLDERID_LocalApplicationData`/<project_path>/data *)
   let data_local_dir = mk GUID.LocalApplicationData "data"
 
-  (** {FOLDERID_ApplicationData}/<project_path>/config *)
+  (** `FOLDERID_ApplicationData`/<project_path>/config *)
   let preference_dir = mk GUID.ApplicationData "config"
 
   let state_dir = cache_dir

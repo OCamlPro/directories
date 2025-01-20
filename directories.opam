@@ -10,8 +10,9 @@ homepage: "https://github.com/ocamlpro/directories"
 bug-reports: "https://github.com/ocamlpro/directories/issues"
 depends: [
   "dune" {>= "2.1"}
-  "ocaml" {>= "4.07.0"}
+  "ocaml" {>= "4.14.0"}
   "ctypes" {>= "0.17.1" & (os = "win32" | os = "cygwin")}
+  "fpath"
 ]
 build: [
   ["dune" "subst"] {pinned}
