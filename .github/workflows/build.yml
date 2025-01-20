@@ -16,16 +16,16 @@ jobs:
           - ubuntu-latest
           - windows-latest
         ocaml-compiler:
-          - "5.0"
+          - "5.3"
         include:
           - os: ubuntu-latest
             ocaml-compiler: "4.07"
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup-ocaml
-        uses: ocaml/setup-ocaml@v2
+        uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
       - name: setup
