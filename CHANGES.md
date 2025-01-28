@@ -1,5 +1,7 @@
 ## unreleased
 
+## 0.6 - 2025d
+
 - use `Fpath.t` instead of `string` where possible
 
 ## 0.5 - 2022-01-09
