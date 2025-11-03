@@ -1,6 +1,10 @@
 ## unreleased
 
-## 0.6 - 2025d
+## 0.7 - 2025-11-03
+
+- fix environment variables for `config_dir` and `data_dir` (thanks @rossberg)
+
+## 0.6 - 2025-01-28
 
 - use `Fpath.t` instead of `string` where possible
 
