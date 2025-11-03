@@ -22,13 +22,13 @@ module Base_dirs () = struct
 
   (** $XDG_CONFIG_HOME or $HOME/.config *)
   let config_dir =
-    match getenvdir "XDG_CONFIG_DIR" with
+    match getenvdir "XDG_CONFIG_HOME" with
     | None -> Option.map (fun dir -> Fpath.(dir / ".config")) home_dir
     | Some _dir as dir -> dir
 
   (** $XDG_DATA_HOME or $HOME/.local/share *)
   let data_dir =
-    match getenvdir "XDG_DATA_DIR" with
+    match getenvdir "XDG_DATA_HOME" with
     | None -> Option.map (fun dir -> Fpath.(dir / ".local" / "share")) home_dir
     | Some _dir as dir -> dir
 
