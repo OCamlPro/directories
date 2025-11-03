@@ -8,7 +8,7 @@ The following conventions are used:
 - [Known Folders] on Windows
 - [Standard Directories] on macOS
 
-On Linux and macOS it has no dependency. On Windows, it depends only on [ctypes].
+It only depends on [fpath]. On Windows, it also has a build-dependency on [ctypes].
 
 ## Quickstart
 
@@ -41,11 +41,12 @@ For more, have a look at the [example] folder.
 
 [ctypes]: https://github.com/ocamllabs/ocaml-ctypes
 [directories-jvm]: https://github.com/dirs-dev/directories-jvm
+[fpath]: https://erratique.ch/software/fpath
 [Known Folders]: https://docs.microsoft.com/fr-fr/windows/win32/shell/known-folders
 [Linux]: https://en.wikipedia.org/wiki/Linux
 [macOS]: https://en.wikipedia.org/wiki/MacOS
 [OCaml]: https://en.wikipedia.org/wiki/OCaml
 [Standard Directories]: https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html#//apple_ref/doc/uid/TP40010672-CH2-SW6
-[xdg-user-dirs]: https://www.freedesktop.org/wiki/Software/xdg-user-dirs/
-[XDG Base Directory Specification]: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+[xdg-user-dirs]: https://www.freedesktop.org/wiki/Software/xdg-user-dirs
+[XDG Base Directory Specification]: https://specifications.freedesktop.org/basedir/latest
 [Windows]: https://en.wikipedia.org/wiki/Microsoft_Windows
